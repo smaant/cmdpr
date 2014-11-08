@@ -29,3 +29,9 @@ class GitTestCase(TestCase):
         dir_name = os.path.join(get_resources_path(), 'not-github-repo')
         os.chdir(dir_name)
         self.assertEqual(git.get_current_branch(), 'master')
+
+    def test_get_repo_owner(self):
+        self.assertEqual(git.get_repo_owner(), 'smaant')
+
+    def test_get_repo_name(self):
+        self.assertEqual(git.get_repo_name(), 'cmdpr')
