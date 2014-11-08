@@ -1,0 +1,3 @@
+[submodule "tests/resources/not-github-repo"]
+	path = tests/resources/not-github-repo
+	url = git@bitbucket.org:smaant/cmdpr-test.git
