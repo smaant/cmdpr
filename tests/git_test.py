@@ -9,6 +9,9 @@ from tests import get_resources_path
 
 class GitTestCase(TestCase):
 
+    def setUp(self):
+        os.chdir(get_root_path())
+
     def test_not_github_repo(self):
         dir_name = os.path.join(get_resources_path(), 'not-github-repo')
         os.chdir(dir_name)
