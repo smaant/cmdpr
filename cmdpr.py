@@ -5,7 +5,8 @@ import sys
 import argparse
 
 from cmdpr.github import GitHub, GitHubException
-from cmdpr import git
+from cmdpr.git import Git, GitException
+
 
 TOKEN_ENV_KEY = 'CMDPR_TOKEN'
 
@@ -27,19 +28,14 @@ if __name__ == '__main__':
     if token is None:
         abort('Add GitHub token to environment variable ' + TOKEN_ENV_KEY, 1)
 
-    if not git.is_git_repo():
-        abort('Your current directory is not a git repository', 2)
-
-    if not git.is_github_repo():
-        abort('Your current git repository is not a GitHub repository', 3)
-
-    github = GitHub(token)
-    if not github.is_token_valid():
-        abort('GitHub token is invalid or revoked', 4)
-
-    branch = git.get_current_branch()
     try:
-        pr_url = github.create_pull_request(branch, args.message[0], args.base[0])
+        git = Git()
+    except GitException as ex:
+        abort(ex.message, 1)
+
+    try:
+        github = GitHub(token)
+        pr_url = github.create_pull_request(git.get_repo_info(), args.message[0], args.base[0])
         print(pr_url)
     except GitHubException as ex:
-        abort(ex.message, 5)
+        abort(ex.message, 1)

@@ -3,8 +3,6 @@ import json
 
 import requests
 
-from cmdpr import git
-
 
 GITHUB_API_HOST = 'https://api.github.com'
 USER_AGENT = 'cmdpr 0.1'
@@ -13,12 +11,12 @@ USER_AGENT = 'cmdpr 0.1'
 class GitHub:
 
     def __init__(self, token):
-        self.repo_owner = git.get_repo_owner()
-        self.repo_name = git.get_repo_name()
-
         self.session = requests.Session()
         self.session.auth = (token, '')
         self.session.headers = {'User-Agent': USER_AGENT}
+
+        if not self.is_token_valid():
+            raise GitHubException('GitHub token is invalid or revoked')
 
     def _do_get(self, url):
         """
@@ -40,18 +38,18 @@ class GitHub:
         :type response: requests.Response
         """
         data = response.json()
-        if 'errors' in data:
+        if 'errors' in data and 'message' in data['errors']:
             return data['errors'][0]['message']
         elif 'message' in data:
             return data['message']
         else:
             return 'Unknown error with code {}: {}'.format(response.status_code, response.reason)
 
-    def create_pull_request(self, branch, title, base='master', body=None):
-        url = '/repos/{user}/{repo}/pulls'.format(user=self.repo_owner, repo=self.repo_name)
+    def create_pull_request(self, repo_info, title, base='master', body=None):
+        url = '/repos/{user}/{repo}/pulls'.format(user=repo_info['owner'], repo=repo_info['name'])
         data = {
             'title': title,
-            'head': branch,
+            'head': repo_info['branch'],
             'base': base,
             'body': body
         }

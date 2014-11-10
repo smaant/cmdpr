@@ -1,0 +1,28 @@
+[
+  {
+    "input": "origin git@github.com:owner/name.git (fetch)\norigin git@github.com:owner/name.git (push)",
+    "expected": {
+      "remote": "origin",
+      "owner": "owner",
+      "name": "name"
+    }
+  },
+
+  {
+    "input": "origin git@github.com:owner/name.git (fetch)\nremote git@github.com:owner/name.git (push)",
+    "expected": {
+      "remote": "remote",
+      "owner": "owner",
+      "name": "name"
+    }
+  },
+
+  {
+    "input": "origin git@github.com:owner/name.1.git (fetch)\norigin git@github.com:owner/name.1.git (push)",
+    "expected": {
+      "remote": "origin",
+      "owner": "owner",
+      "name": "name.1"
+    }
+  }
+]
