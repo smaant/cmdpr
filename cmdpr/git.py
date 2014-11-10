@@ -23,13 +23,13 @@ def is_git_repo():
 
 def is_github_repo():
     output = _run(['git', 'remote', '-v'])
-    match = re.findall(r'(?:(?:git@)|(?:https://))github.com[^(]*\(push\)', output)
+    match = re.findall(r'(?:(?:git@)|(?:https://))github.com.*\(push\)$', output, re.MULTILINE)
     return len(match) == 1
 
 
 def get_repo_owner():
     output = _run(['git', 'remote', '-v'])
-    match = re.findall(r'github.com:([^/]+)/[^(]*\(push\)', output)
+    match = re.findall(r'github.com:([^/]+)/.*\(push\)$', output, re.MULTILINE)
     if len(match) != 1:
         raise RuntimeError('Exactly one match expected, was <{}>'.format(match))
     else:
@@ -38,7 +38,7 @@ def get_repo_owner():
 
 def get_repo_name():
     output = _run(['git', 'remote', '-v'])
-    match = re.findall(r'github.com:.*/([^.]+)\.[^(]*\(push\)', output)
+    match = re.findall(r'github.com:.*/([^.]+).*\(push\)$', output, re.MULTILINE)
     if len(match) != 1:
         raise RuntimeError('Exactly one match expected, was <{}>'.format(match))
     else:
