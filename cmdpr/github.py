@@ -38,9 +38,11 @@ class GitHub:
         :type response: requests.Response
         """
         data = response.json()
-        if 'errors' in data and 'message' in data['errors']:
-            return data['errors'][0]['message']
-        elif 'message' in data:
+        for error in data.get('errors', []):
+            if 'message' in error:
+                return data['errors'][0]['message']
+
+        if 'message' in data:
             return data['message']
         else:
             return 'Unknown error with code {}: {}'.format(response.status_code, response.reason)
