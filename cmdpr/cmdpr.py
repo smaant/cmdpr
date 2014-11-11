@@ -1,21 +1,16 @@
 #!/usr/bin/env python
 # coding: utf-8
 import os
-import sys
 import argparse
 
-from cmdpr.github import GitHub, GitHubException
-from cmdpr.git import Git, GitException
+from github import GitHub, GitHubException
+from git import Git, GitException
 
 
 TOKEN_ENV_KEY = 'CMDPR_TOKEN'
 
 
-def abort(message, error_code):
-    print('ERROR: ' + message)
-    sys.exit(error_code)
-
-if __name__ == '__main__':
+def pull_request():
     parser = argparse.ArgumentParser(description='Creates GitHub pull request for current branch in current git repo')
     parser.add_argument('-m', '--message', dest='message', type=str, nargs=1, metavar='SUMMARY', required=True,
                         help='Pull request summary')
@@ -26,16 +21,19 @@ if __name__ == '__main__':
 
     token = os.environ.get(TOKEN_ENV_KEY)
     if token is None:
-        abort('Add GitHub token to environment variable ' + TOKEN_ENV_KEY, 1)
+        print('ERROR: Add GitHub token to environment variable ' + TOKEN_ENV_KEY)
+        return 1
 
     try:
         git = Git()
     except GitException as ex:
-        abort(ex.message, 1)
+        print('ERROR: ' + ex.message)
+        return 1
 
     try:
         github = GitHub(token)
         pr_url = github.create_pull_request(git.get_repo_info(), args.message[0], args.base[0])
         print(pr_url)
     except GitHubException as ex:
-        abort(ex.message, 1)
+        print('ERROR: ' + ex.message)
+        return 1
