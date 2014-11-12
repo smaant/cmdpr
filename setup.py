@@ -8,7 +8,7 @@ setup(
     version="0.1",
     description='Creates GitHub pull request for current branch in current git repository',
 
-    packages=find_packages(exclude=['tests']),
+    packages=find_packages(),
     entry_points={
         'console_scripts': ['cmdpr = cmdpr.cmdpr:pull_request']
     },
