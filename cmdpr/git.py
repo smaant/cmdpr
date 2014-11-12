@@ -52,6 +52,14 @@ class Git:
         repo_info['branch'] = self.get_current_branch()
         return repo_info
 
+    def get_commits(self, base):
+        remote = self.get_repo_info()['remote']
+        branch = self.get_current_branch()
+        output = self._run(['git', 'log',
+                            '{remote}/{base}..{remote}/{branch}'.format(remote=remote, base=base, branch=branch),
+                            '--pretty=%s'])
+        return output.splitlines()
+
 
 class GitException(Exception):
     def __init__(self, message):
