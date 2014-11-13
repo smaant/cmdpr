@@ -5,7 +5,7 @@ from unittest import TestCase
 
 from cmdpr.git import Git
 from cmdpr import get_root_path
-from tests import get_resource_path, get_resources_path
+from cmdpr_tests import get_resource_path, get_resources_path
 
 
 class GitTestCase(TestCase):
