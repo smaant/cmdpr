@@ -48,11 +48,11 @@ def create_request_title(commits):
 
     if len(commits) == 1:
         tmpfile.file.write(commits[0])
-    else:
-        tmpfile.file.write('\n\n# Write title for the pull request. '
-                           'First line will be considered as a title, the rest as a body.\n')
-        tmpfile.file.write('# All comments and empty lines will be removed. List of commits:\n')
-        tmpfile.file.writelines(['# {}\n'.format(x) for x in commits])
+
+    tmpfile.file.write('\n\n# Write title for the pull request. '
+                       'First line will be considered as a title, the rest as a body.\n')
+    tmpfile.file.write('# All comments and empty lines will be removed. List of commits:\n')
+    tmpfile.file.writelines(['# {}\n'.format(x) for x in commits])
 
     tmpfile.file.close()
     Popen([editor, tmpfile.name]).wait()
@@ -61,6 +61,7 @@ def create_request_title(commits):
 
 def extract_title_and_body(text):
     match = re.findall(r'^([^#\n].*)$', text, re.MULTILINE)
-
-
-create_request_title(Git().get_commits('master'))
+    stripped = [s for s in map(lambda x: x.strip(), match) if s != '']
+    title = stripped[0] if len(stripped) > 0 else None
+    body = '\n'.join(stripped[1:]) if len(stripped) > 1 else None
+    return title, body

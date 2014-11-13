@@ -1,0 +1,78 @@
+-
+  text: |
+
+
+    # Write title for the pull request. First line will be considered as a title, the rest as a body.
+    # All comments and empty lines will be removed. List of commits
+    # Commit1
+    # Commit2
+  title:
+  body:
+
+-
+
+  text: |
+    Commit1
+
+    # Write title for the pull request. First line will be considered as a title, the rest as a body.
+    # All comments and empty lines will be removed.
+  title: Commit1
+  body:
+
+-
+
+  text: Commit1
+  title: Commit1
+  body:
+
+-
+
+  text: |
+    My commit
+
+    # Write title for the pull request. First line will be considered as a title, the rest as a body.
+    # All comments and empty lines will be removed. List of commits
+    # Commit1
+    # Commit2
+  title: My commit
+  body:
+
+-
+
+  text: |
+
+
+    # Write title for the pull request. First line will be considered as a title, the rest as a body.
+    # All comments and empty lines will be removed. List of commits
+     Commit1
+    # Commit2
+  title: Commit1
+  body:
+
+-
+
+  text: |
+
+
+    # Write title for the pull request. First line will be considered as a title, the rest as a body.
+    # All comments and empty lines will be removed. List of commits
+     Commit1
+     Commit2
+  title: Commit1
+  body: Commit2
+
+-
+
+  text: |
+    Title
+    Body line 1
+    Body line 2
+
+    # Write title for the pull request. First line will be considered as a title, the rest as a body.
+    # All comments and empty lines will be removed. List of commits
+    # Commit1
+    # Commit2
+  title: Title
+  body: |
+      Body line 1
+      Body line 2

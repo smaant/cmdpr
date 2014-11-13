@@ -14,6 +14,7 @@ setup(
     },
 
     install_requires=['requests'],
+    tests_require=['PyYAML'],
     zip_safe=False,
 
     author='Anton Panferov',
