@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="cmdpr",
-    version="0.1",
+    version="0.2",
     description='Creates GitHub pull request for current branch in current git repository',
 
     packages=find_packages(),
