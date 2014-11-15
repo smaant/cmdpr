@@ -5,12 +5,15 @@ import argparse
 from subprocess import Popen
 from tempfile import NamedTemporaryFile
 import re
+import logging
 
 from github import GitHub, GitHubException
 from git import Git, GitException
 
 
 TOKEN_ENV_KEY = 'CMDPR_TOKEN'
+
+logger = logging.getLogger(__name__)
 
 
 def pull_request():
@@ -19,8 +22,12 @@ def pull_request():
                         help='Pull request summary')
     parser.add_argument('-b', '--base', dest='base', type=str, nargs=1, metavar='BASE_BRANCH', default=['master'],
                         help='Base for pull request, master by default')
+    parser.add_argument('--debug', dest='debug', action='store_true', help='Enable debug output')
 
     args = parser.parse_args()
+
+    if args.debug:
+        logging.disable(logging.NOTSET)
 
     token = os.environ.get(TOKEN_ENV_KEY)
     if token is None:
