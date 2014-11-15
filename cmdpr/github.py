@@ -20,9 +20,6 @@ class GitHub:
         if token is not None:
             self.session.auth = (token, '')
 
-        # if not self.is_token_valid():
-        #     raise GitHubException('GitHub token is invalid or revoked')
-
     def _do_get(self, url):
         """
         :rtype: requests.Response
@@ -39,7 +36,7 @@ class GitHub:
         """
         :rtype: requests.Response
         """
-        all_headers = self.session.headers + headers
+        all_headers = dict(headers.items() + self.session.headers.items())
         authorization_url = GITHUB_API_HOST + url
 
         logger.debug('POST {} (headers={}, data={})'.format(authorization_url, all_headers, data))
@@ -87,12 +84,11 @@ class GitHub:
                                            {'X-GitHub-OTP': one_time_password}, data)
         response_data = response.json()
         if response.status_code == 401 and 'X-GitHub-OTP' in response.headers:
-            return {'status': 'TFA'}
-        elif 'token' not in response_data:
-            return {'status': 'error', 'message': response_data.get('message', '')}
+            return None
+        elif 'token' in response_data:
+            return response_data['token']
         else:
-            self.session.auth = (response_data['token'], '')
-            return {'status': 'ok'}
+            raise GitHubException(self._extract_error_message(response))
 
 
 class GitHubException(Exception):
