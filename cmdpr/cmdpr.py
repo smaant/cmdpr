@@ -2,10 +2,11 @@
 # coding: utf-8
 import os
 import argparse
-from subprocess import Popen
-from tempfile import NamedTemporaryFile
 import re
 import logging
+from subprocess import Popen
+from tempfile import NamedTemporaryFile
+from getpass import getpass
 
 from github import GitHub, GitHubException
 from git import Git, GitException
@@ -30,9 +31,19 @@ def pull_request():
         logging.disable(logging.NOTSET)
 
     token = os.environ.get(TOKEN_ENV_KEY)
-    if token is None:
-        print('ERROR: Add GitHub token to environment variable ' + TOKEN_ENV_KEY)
-        return 1
+    github = GitHub()
+    if token is not None:
+        github = GitHub(token)
+    else:
+        login, token = get_user_credentials()
+        authorization_status = github.create_token(login, token)
+        if authorization_status['status'] == 'TFA':
+            otp = raw_input('Two-factor code: ')
+            authorization_status = github.create_token(login, token, otp)
+
+        if authorization_status['status'] != 'ok':
+            print('ERROR: ' + authorization_status['message'])
+            return 1
 
     try:
         git = Git()
@@ -41,8 +52,6 @@ def pull_request():
         return 1
 
     try:
-        github = GitHub(token)
-
         base = args.base[0]
         title, body = None, None
         if args.message is None:
@@ -59,6 +68,12 @@ def pull_request():
     except GitHubException as ex:
         print('ERROR: ' + ex.message)
         return 1
+
+
+def get_user_credentials():
+    login = raw_input('Login: ')
+    password = getpass()
+    return login, password
 
 
 def create_request_title(commits):
