@@ -9,9 +9,11 @@ from getpass import getpass
 
 from github import GitHub, GitHubException
 from git import Git, GitException
+from config import CmdprConfig
 
 
 TOKEN_ENV_KEY = 'CMDPR_TOKEN'
+CONFIG = os.path.expanduser('~/.config/cmdpr')
 
 logger = logging.getLogger(__name__)
 
@@ -38,8 +40,10 @@ def pull_request():
         print('ERROR: ' + ex.message)
         return 1
 
+    config = CmdprConfig(CONFIG)
+
     try:
-        github = GitHub(get_token())
+        github = GitHub(get_token(config))
 
         base = args.base[0]
         title, body = None, None
@@ -59,8 +63,8 @@ def pull_request():
         return 1
 
 
-def get_token():
-    token = os.environ.get(TOKEN_ENV_KEY)
+def get_token(config):
+    token = config.get('token')
     if token is None:
         github = GitHub()
         login, password = get_user_credentials()
@@ -68,6 +72,8 @@ def get_token():
         if token is None:
             otp = raw_input('Two-factor code: ')
             token = github.create_token(login, password, otp)
+            config.put('token', token)
+            config.save()
 
     return token
 

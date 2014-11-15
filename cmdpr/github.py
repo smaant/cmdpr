@@ -1,12 +1,16 @@
 # coding: utf-8
 import json
 import logging
+import platform
+from datetime import datetime
 
 import requests
 
+import cmdpr
+
 
 GITHUB_API_HOST = 'https://api.github.com'
-USER_AGENT = 'cmdpr 0.3'
+USER_AGENT = 'cmdpr ' + cmdpr.version
 
 logger = logging.getLogger(__name__)
 
@@ -77,8 +81,11 @@ class GitHub:
             return data['html_url']
 
     def create_token(self, login, password, one_time_password=''):
+        comp_name = platform.node()[:platform.node().rfind('.')]
+        time = datetime.now().isoformat()
+        note = 'cmdpr {v} - {comp} - {time}'.format(v=cmdpr.version, comp=comp_name, time=time)
         data = {
-            'scopes': ['repo'], 'note': 'cmdpr', 'note_url': 'https://github.com/smaant/cmdpr'
+            'scopes': ['repo'], 'note': note, 'note_url': cmdpr.repo_url
         }
         response = self._do_post_with_auth('/authorizations', (login, password),
                                            {'X-GitHub-OTP': one_time_password}, data)
