@@ -80,7 +80,7 @@ def get_token(config):
 
 def get_user_credentials():
     login = raw_input('Login: ')
-    password = getpass()
+    password = getpass('Password (not stored): ')
     return login, password
 
 
