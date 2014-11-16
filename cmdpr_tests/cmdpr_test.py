@@ -3,7 +3,7 @@ from unittest import TestCase
 
 import yaml
 from cmdpr_tests import get_resource_path
-from cmdpr import cmdpr
+from cmdpr import pullrequest
 
 
 class CmdprTestCase(TestCase):
@@ -12,5 +12,5 @@ class CmdprTestCase(TestCase):
         data = yaml.load(open(get_resource_path('commits.yaml')).read())
         for case in data:
             self.assertEqual(
-                cmdpr.extract_title_and_body(case['text']),
+                pullrequest.extract_title_and_body(case['text']),
                 (case['title'], case['body']))

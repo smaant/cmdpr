@@ -2,15 +2,17 @@
 # coding: utf-8
 from setuptools import setup, find_packages
 
+import cmdpr
+
 
 setup(
-    name="cmdpr",
-    version="0.2",
+    name='cmdpr',
+    version=cmdpr.version,
     description='Creates GitHub pull request for current branch in current git repository',
 
     packages=find_packages(),
     entry_points={
-        'console_scripts': ['cmdpr = cmdpr.cmdpr:pull_request']
+        'console_scripts': ['cmdpr = cmdpr.pullrequest:pull_request']
     },
 
     install_requires=['requests'],
@@ -19,5 +21,5 @@ setup(
 
     author='Anton Panferov',
     author_email='smaant@gmail.com',
-    url='https://github.com/smaant/cmdpr'
+    url=cmdpr.repo_url
 )

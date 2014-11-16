@@ -7,6 +7,7 @@ Requirements
 =====
  * python 2.7
  * requests
+ * PyYAML (for unit tests)
 
 Installation
 =====
@@ -14,15 +15,28 @@ Installation
 python setup.py install
 ```
 ## Authorization
-1. Create new personal access token in GitHub (Settings -> Applications -> Generate new token). Only "repo" scope required.
-1. Save access token in environment variable `CMDPR_TOKEN`
+On first launch you'll be prompted to enter your GitHub login/password (and two-factor authorization code if enabled). Using provided credentials personal access token will be created and stored in config file (`~/.config/cmdpr`).
+
+**Personal access token will grant access to your repositories (public and private) for anyone who has it. Therefore don't use *cmdpr* on any public or not trusted computers.**
+
+In any case you can revoke any of your personal access tokens from your settings on GitHub. See [this blog post](https://github.com/blog/1509-personal-api-tokens) for more details.
 
 Usage
 =====
 ```
-cmdpr [-h] -m SUMMARY [-b BASE_BRANCH]
+cmdpr [-h] [-m SUMMARY] [-b BASE_BRANCH] [--debug]
 ```
+If you don't provide summary, *cmdpr* will open a text editor with a list of commits on current branch, so you can write one.
 
-Plans
+If base branch is omitted `master` will be implied.
+
+Uninstall
 ====
- 1. Add creating personal access token through basic authorization
+The easiest way to uninstall *cmdpr* is to use `pip`:
+```bash
+pip uninstall cmdpr
+```
+**Don't forget to remove your config file if you're not going to use *cmdpr* later:**
+```bash
+rm ~/.config/cmdpr
+```
