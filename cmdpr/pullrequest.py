@@ -56,7 +56,12 @@ def pull_request():
             print('ERROR: There\'s no title for pull request')
             return 1
 
-        pr_url = github.create_pull_request(git.get_repo_info(), title, base, body)
+        repo_info = git.get_repo_info()
+        bug_tracker = config.get("bug_tracker")
+        if bug_tracker:
+            body = bug_tracker.format(task=repo_info['branch'])
+
+        pr_url = github.create_pull_request(repo_info, title, base, body)
         print(pr_url)
     except GitHubException as ex:
         print('ERROR: ' + ex.message)
