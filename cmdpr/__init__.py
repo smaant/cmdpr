@@ -2,7 +2,7 @@
 import os
 import logging
 
-version = '1.0'
+version = '1.0.1'
 repo_url = 'https://github.com/smaant/cmdpr'
 
 handler = logging.StreamHandler()

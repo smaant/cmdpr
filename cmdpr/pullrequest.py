@@ -46,7 +46,7 @@ def pull_request():
         github = GitHub(get_token(config))
 
         base = args.base[0]
-        title, body = None, None
+        title, body = '', ''
         if args.message is None:
             title, body = create_request_title(git.get_commits(base))
         else:

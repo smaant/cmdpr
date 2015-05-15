@@ -34,7 +34,10 @@ class GitHub:
         """
         :rtype: requests.Response
         """
-        return self.session.post(GITHUB_API_HOST + url, data=json.dumps(data))
+        logger.debug(u'POST {} (headers={}, data={})'.format(url, self.session.headers, data))
+        response = self.session.post(GITHUB_API_HOST + url, data=json.dumps(data))
+        logger.debug(u'got {}: {} ({})'.format(response.status_code, response.reason, response.text))
+        return response
 
     def _do_post_with_auth(self, url, auth, headers, data):
         """
@@ -65,7 +68,7 @@ class GitHub:
         else:
             return 'Unknown error with code {}: {}'.format(response.status_code, response.reason)
 
-    def create_pull_request(self, repo_info, title, base='master', body=None):
+    def create_pull_request(self, repo_info, title, base='master', body=''):
         url = '/repos/{user}/{repo}/pulls'.format(user=repo_info['owner'], repo=repo_info['name'])
         data = {
             'title': title,
